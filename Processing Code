@@ -1,0 +1,58 @@
+/**
+ * Loop. 
+ * 
+ * Shows how to load and play a QuickTime movie file.  
+ *
+ */
+import processing.serial.*;
+import processing.video.*;
+Serial myPort; 
+Movie movie;
+Movie dirty;
+float value ;
+PImage img;
+
+
+void setup() {
+  myPort  =  new Serial (this, "COM5",  9600); /. Choose the port of ur arduino
+  myPort.bufferUntil ( '\n' );
+  img = loadImage("trash.png");
+  
+  //size(560, 406);
+ size(560,406);
+  background(0);
+  // Load and play the video in a loop
+  movie = new Movie(this, "clear.mp4");
+  movie.loop();
+  
+  dirty = new Movie(this, "dirty.mp4");
+  dirty.loop();
+
+ 
+}
+
+void serialEvent  (Serial myPort) {
+
+value  =  float (myPort.readStringUntil ( '\n' ) ) ;  // Changing the background color according to received data
+
+} 
+
+
+void movieEvent(Movie m) {
+  if ( value < 950) {
+  m.read();
+                    }
+
+                         }
+
+void draw() {
+  //if (movie.available() == true) {
+  //  movie.read(); 
+  //}
+  image(movie, 0, 0, width, height);
+    println(value);
+  if(value > 950) {
+ image(img, 0, 0,width,height);
+ frameRate(60);
+  }
+}
